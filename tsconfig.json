@@ -1,0 +1,38 @@
+{
+    "compilerOptions": {
+        "declaration": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "lib": ["es2015", "es2017", "dom"],
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "target": "ESNext",
+        "allowJs": false,
+        "strict": true,
+        "noUnusedLocals": true,
+        "jsx": "react",
+        "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "downlevelIteration": true,
+        "baseUrl": ".",
+        "outDir": "dist/",
+        "paths": {
+            
+        },
+        "plugins": [
+            {
+                "name": "typescript-tslint-plugin",
+                "alwaysShowRuleFailuresAsWarnings": true,
+                "ignoreDefinitionFiles": true,
+                "configFile": "./tslint.json",
+                "suppressWhileTypeErrorsPresent": true,
+                "mockTypeScriptVersion": false
+            }
+        ]
+    }
+}
