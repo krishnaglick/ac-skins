@@ -1,7 +1,7 @@
 import { createWorker } from "tesseract.js";
 
 const worker = createWorker({
-  logger: m => console.log(m)
+  logger: console.log
 });
 
 const getCreatorId = (text: string) => {
@@ -16,18 +16,15 @@ const getOutfitId = (text: string) => {
   return outfitId;
 };
 
-(async () => {
+export async function processImage(image = "./test-images/eternal-jacket.jpg") {
   await worker.load();
   await worker.loadLanguage("eng");
   await worker.initialize("eng");
   const {
     data: { text }
-  } = await worker.recognize(
-    // "https://tesseract.projectnaptha.com/img/eng_bw.png"
-    "./test-images/eternal-jacket.jpg"
-  );
+  } = await worker.recognize(image);
   const creatorId = getCreatorId(text);
   const outfitId = getOutfitId(text);
   console.log({ creatorId, outfitId });
   await worker.terminate();
-})();
+}

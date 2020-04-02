@@ -4,17 +4,28 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node index.ts",
-    "dev": "tsnd --respawn index.ts",
-    "build": "tsc ."
+    "start": "yarn next build",
+    "dev": "yarn next",
+    "build": "yarn next build"
   },
   "dependencies": {
+    "antd": "^4.1.0",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "^9.3.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "tesseract.js": "^2.1.1",
     "ts-node": "^8.8.1",
     "typescript": "^3.8.3",
     "typescript-tslint-plugin": "^0.5.5"
   },
   "devDependencies": {
-    "ts-node-dev": "^1.0.0-pre.44"
+    "@types/node": "^13.9.8",
+    "@types/react": "^16.9.31",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-plugin-prettier": "^2.3.0",
+    "tslint-react": "^4.2.0"
   }
 }
