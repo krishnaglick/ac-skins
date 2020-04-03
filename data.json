@@ -1,0 +1,235 @@
+{
+    "created_at": "Thu Apr 02 13:13:02 +0000 2020",
+    "id": 1245700771485610000,
+    "id_str": "1245700771485609984",
+    "text": "Guider to the Eternal Edge Parka Gran &amp; Djeeta #どうぶつの森 #AnimalCrossing #ACNH #NintendoSwitch https://t.co/J4AOA9STUL",
+    "truncated": false,
+    "entities": {
+        "hashtags": [
+            {
+                "text": "どうぶつの森",
+                "indices": [
+                    51,
+                    58
+                ]
+            },
+            {
+                "text": "AnimalCrossing",
+                "indices": [
+                    59,
+                    74
+                ]
+            },
+            {
+                "text": "ACNH",
+                "indices": [
+                    75,
+                    80
+                ]
+            },
+            {
+                "text": "NintendoSwitch",
+                "indices": [
+                    81,
+                    96
+                ]
+            }
+        ],
+        "symbols": [],
+        "user_mentions": [],
+        "urls": [],
+        "media": [
+            {
+                "id": 1245700769065472000,
+                "id_str": "1245700769065472002",
+                "indices": [
+                    97,
+                    120
+                ],
+                "media_url": "http://pbs.twimg.com/media/EUmeP9yUEAIzD7E.jpg",
+                "media_url_https": "https://pbs.twimg.com/media/EUmeP9yUEAIzD7E.jpg",
+                "url": "https://t.co/J4AOA9STUL",
+                "display_url": "pic.twitter.com/J4AOA9STUL",
+                "expanded_url": "https://twitter.com/rinrinririnano/status/1245700771485609984/photo/1",
+                "type": "photo",
+                "sizes": {
+                    "large": {
+                        "w": 1280,
+                        "h": 720,
+                        "resize": "fit"
+                    },
+                    "thumb": {
+                        "w": 150,
+                        "h": 150,
+                        "resize": "crop"
+                    },
+                    "small": {
+                        "w": 680,
+                        "h": 383,
+                        "resize": "fit"
+                    },
+                    "medium": {
+                        "w": 1200,
+                        "h": 675,
+                        "resize": "fit"
+                    }
+                }
+            }
+        ]
+    },
+    "extended_entities": {
+        "media": [
+            {
+                "id": 1245700769065472000,
+                "id_str": "1245700769065472002",
+                "indices": [
+                    97,
+                    120
+                ],
+                "media_url": "http://pbs.twimg.com/media/EUmeP9yUEAIzD7E.jpg",
+                "media_url_https": "https://pbs.twimg.com/media/EUmeP9yUEAIzD7E.jpg",
+                "url": "https://t.co/J4AOA9STUL",
+                "display_url": "pic.twitter.com/J4AOA9STUL",
+                "expanded_url": "https://twitter.com/rinrinririnano/status/1245700771485609984/photo/1",
+                "type": "photo",
+                "sizes": {
+                    "large": {
+                        "w": 1280,
+                        "h": 720,
+                        "resize": "fit"
+                    },
+                    "thumb": {
+                        "w": 150,
+                        "h": 150,
+                        "resize": "crop"
+                    },
+                    "small": {
+                        "w": 680,
+                        "h": 383,
+                        "resize": "fit"
+                    },
+                    "medium": {
+                        "w": 1200,
+                        "h": 675,
+                        "resize": "fit"
+                    }
+                }
+            },
+            {
+                "id": 1245700769061277700,
+                "id_str": "1245700769061277696",
+                "indices": [
+                    97,
+                    120
+                ],
+                "media_url": "http://pbs.twimg.com/media/EUmeP9xUEAAYr-e.jpg",
+                "media_url_https": "https://pbs.twimg.com/media/EUmeP9xUEAAYr-e.jpg",
+                "url": "https://t.co/J4AOA9STUL",
+                "display_url": "pic.twitter.com/J4AOA9STUL",
+                "expanded_url": "https://twitter.com/rinrinririnano/status/1245700771485609984/photo/1",
+                "type": "photo",
+                "sizes": {
+                    "thumb": {
+                        "w": 150,
+                        "h": 150,
+                        "resize": "crop"
+                    },
+                    "medium": {
+                        "w": 1200,
+                        "h": 675,
+                        "resize": "fit"
+                    },
+                    "small": {
+                        "w": 680,
+                        "h": 383,
+                        "resize": "fit"
+                    },
+                    "large": {
+                        "w": 1280,
+                        "h": 720,
+                        "resize": "fit"
+                    }
+                }
+            }
+        ]
+    },
+    "source": "<a href=\"https://www.nintendo.com/countryselector\" rel=\"nofollow\">Nintendo Switch Share</a>",
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+        "id": 133570512,
+        "id_str": "133570512",
+        "name": "ʕ•ﻌ•ʔ",
+        "screen_name": "rinrinririnano",
+        "location": "",
+        "description": "hi. いキテルグマ. Bewear of spoilers. 日本語話せますよ、気安く話しかけるのもオケ. Instagram: kumarinette. Icon ❤️ from Raikachu",
+        "url": "https://t.co/0EOcfMxawF",
+        "entities": {
+            "url": {
+                "urls": [
+                    {
+                        "url": "https://t.co/0EOcfMxawF",
+                        "expanded_url": "http://twpf.jp/rinrinririnano",
+                        "display_url": "twpf.jp/rinrinririnano",
+                        "indices": [
+                            0,
+                            23
+                        ]
+                    }
+                ]
+            },
+            "description": {
+                "urls": []
+            }
+        },
+        "protected": false,
+        "followers_count": 37,
+        "friends_count": 183,
+        "listed_count": 1,
+        "created_at": "Fri Apr 16 03:42:34 +0000 2010",
+        "favourites_count": 38055,
+        "utc_offset": null,
+        "time_zone": null,
+        "geo_enabled": false,
+        "verified": false,
+        "statuses_count": 90124,
+        "lang": null,
+        "contributors_enabled": false,
+        "is_translator": false,
+        "is_translation_enabled": true,
+        "profile_background_color": "F3F3F3",
+        "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png",
+        "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png",
+        "profile_background_tile": false,
+        "profile_image_url": "http://pbs.twimg.com/profile_images/1209748051742453760/wkuzE-Do_normal.jpg",
+        "profile_image_url_https": "https://pbs.twimg.com/profile_images/1209748051742453760/wkuzE-Do_normal.jpg",
+        "profile_banner_url": "https://pbs.twimg.com/profile_banners/133570512/1577248584",
+        "profile_link_color": "333399",
+        "profile_sidebar_border_color": "000000",
+        "profile_sidebar_fill_color": "E6E6E6",
+        "profile_text_color": "888888",
+        "profile_use_background_image": true,
+        "has_extended_profile": true,
+        "default_profile": false,
+        "default_profile_image": false,
+        "following": null,
+        "follow_request_sent": null,
+        "notifications": null,
+        "translator_type": "none"
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": null,
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "possibly_sensitive_appealable": false,
+    "lang": "en"
+}
