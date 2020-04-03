@@ -2,6 +2,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { twitterApi } from "../../util/get-tweet";
 import { imageProcessor } from "../../util/image-processor";
 
+export type ProcessedImage = {
+    outfits: {
+        creatorId: string;
+        outfitId: string;
+        image: string;
+    }[];
+    hashtags: string[];
+    creator: string;
+};
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const url: string = req.body.url;
     if (url) {
@@ -11,7 +21,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             return res.send({
                 outfits: await Promise.all(imageData.images.map(image => imageProcessor.processImage(image))),
                 hashtags: imageData.hashtags,
-            });
+                creator: imageData.creator,
+            } as ProcessedImage);
         }
     }
 
