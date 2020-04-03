@@ -12,8 +12,8 @@ const history = typeof window !== "undefined" ? createBrowserHistory() : createM
 
 export const App = () => {
     return (
-        <Router history={history}>
-            <Layout className="layout">
+        <Layout className="layout">
+            <Router history={history}>
                 <Nav />
                 <Content style={{ padding: "0 50px" }}>
                     <div className="site-layout-content">
@@ -25,7 +25,7 @@ export const App = () => {
                     </div>
                 </Content>
                 <Footer style={{ textAlign: "center" }}>Ant Design ©2018 Created by Ant UED</Footer>
-            </Layout>
-        </Router>
+            </Router>
+        </Layout>
     );
 };

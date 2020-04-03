@@ -1,32 +1,43 @@
 import React, { useState } from "react";
-import { Layout, Form, Input, Button } from "antd";
+import { Form, Input, Button } from "antd";
 import axios from "axios";
 
 const processImage = async (url: string) => {
     if (url.includes("http")) {
-        await axios.post("/api/process-image", { url });
+        console.log(await axios.post("/api/process-image", { url }));
     }
 };
 
-export const SubmitOutfit = () => {
-    const [imageUrl, setImageUrl] = useState("");
+const saveOutfit = async (outfit: {}) => {
+    await axios.post("/api/save-outfit", outfit);
+};
 
+// type SubmitOutfitState = {
+//     title: string;
+// };
+
+// export class cSubmitOutfit extends React.Component<{}, SubmitOutfitState> {}
+
+export const SubmitOutfit = () => {
+    const [formValue, updateFormValue] = useState({});
+
+    console.log(formValue);
     return (
-        <Layout>
-            <Form>
-                <Form.Item label="outfitName">
+        <div>
+            <Form initialValues={{}} onValuesChange={(_, formValues) => updateFormValue(formValues)}>
+                <Form.Item label="outfitName" name="outfitName">
                     <Input placeholder="That Cute Sweater from Friends" />
                 </Form.Item>
-                <Form.Item label="outfitSource">
-                    <Input placeholder="Twitter, Imgur, Etc" onChange={e => setImageUrl(e.target.value)} />
+                <Form.Item label="outfitSource" name="outfitSource">
+                    <Input.Search placeholder="Twitter, Imgur, Etc" enterButton="Load Outfit" onSearch={processImage} />
                     <span>Image hosting is expensive!</span>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" onClick={() => processImage(imageUrl)}>
+                    <Button type="primary" onClick={() => saveOutfit(formValue)}>
                         Submit
                     </Button>
                 </Form.Item>
             </Form>
-        </Layout>
+        </div>
     );
 };
