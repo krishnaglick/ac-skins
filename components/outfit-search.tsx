@@ -6,7 +6,7 @@ import type { OutfitData } from "./submit-outfit";
 const searchOutfits = async (searchTerm: string) => {
     const data = (await axios.get<OutfitData[]>(`/api/get-outfits?search=${searchTerm}`)).data;
     console.log({ data });
-    return data;
+    return [];
 };
 
 export const OutfitSearch = () => {
