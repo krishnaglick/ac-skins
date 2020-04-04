@@ -34,7 +34,15 @@ class Twitter {
         );
         const hashtags = data.entities.hashtags.map(h => h.text);
         const images = data.entities.media.map(media => media.media_url);
-        return { hashtags, images, creator: data.user.screen_name };
+        return {
+            hashtags,
+            images,
+            creator: {
+                screen_name: data.user.screen_name,
+                avatar: data.user.profile_image_url,
+            },
+            description: data.text,
+        };
     };
 }
 

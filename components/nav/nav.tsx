@@ -9,7 +9,7 @@ export const Nav = withRouter(({ location }) => {
     return (
         <Header>
             <div className={styles.logo} />
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[location.pathname.replace("/", "")]}>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[location?.pathname.replace("/", "") || "/"]}>
                 <Menu.Item key="home">
                     <Link to="/">Home</Link>
                 </Menu.Item>

@@ -36,17 +36,19 @@ class Elastic {
         }
     }
 
-    async get(index: Indicies, outfitName?: string, tags?: string[]) {
+    async get(index: Indicies, outfitName?: string, tags?: string[]): Promise<OutfitData[]> {
         console.debug({ index, outfitName, tags });
         try {
-            return await this.client.search({
+            const queryData = await this.client.search({
                 index,
                 body: {
                     query: {
-                        match: { outfitName },
+                        // match: { tags },
+                        match_phrase_prefix: { outfitName },
                     },
                 },
             });
+            return queryData.body?.hits?.hits || [];
         } catch (err) {
             console.trace("Failed Index Search");
             console.trace({ index, outfitName, tags });

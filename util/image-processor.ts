@@ -16,17 +16,20 @@ class ImageProcessor {
         return outfitId;
     };
 
-    processImage = async (image = "./test-images/eternal-jacket.jpg") => {
+    processImage = async (outfitImage = "./test-images/eternal-jacket.jpg") => {
         await this.worker.load();
         await this.worker.loadLanguage("eng");
         await this.worker.initialize("eng");
         const {
             data: { text },
-        } = await this.worker.recognize(image);
+        } = await this.worker.recognize(outfitImage);
         const creatorId = this.getCreatorId(text);
         const outfitId = this.getOutfitId(text);
         await this.worker.terminate();
-        return { creatorId, outfitId, image };
+        if (!creatorId || !outfitId) {
+            throw new Error("Error Parsing Image");
+        }
+        return { creatorId, outfitId, outfitImage };
     };
 }
 

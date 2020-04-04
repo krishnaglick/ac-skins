@@ -8,9 +8,11 @@ import { OutfitSearch } from "./outfit-search";
 import { SubmitOutfit } from "./submit-outfit";
 
 const { Content, Footer } = Layout;
+
 const history = typeof window !== "undefined" ? createBrowserHistory() : createMemoryHistory();
 
-export const App = () => {
+export const App = ({ pathname }: { pathname: string }) => {
+    history.push(pathname);
     return (
         <Layout className="layout">
             <Router history={history}>

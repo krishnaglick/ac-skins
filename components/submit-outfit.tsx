@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Card, Select } from "antd";
 import axios from "axios";
-import type { ProcessedImage } from "../pages/api/process-image";
+import type { ProcessedOutfit } from "../pages/api/process-image";
 import { Indicies } from "../util/elastic-indicies";
 
 const processImage = async (url: string) => {
     if (url.includes("http")) {
-        return (await axios.post<ProcessedImage>("/api/process-image", { url })).data;
+        return (await axios.post<ProcessedOutfit>("/api/process-image", { url })).data;
     }
 };
 
@@ -17,7 +17,7 @@ type FormData = {
 };
 
 export type OutfitData = {
-    processedImage?: ProcessedImage;
+    processedOutfit: ProcessedOutfit;
 } & FormData;
 
 const saveOutfit = async (outfit: OutfitData) => {
@@ -27,13 +27,13 @@ const saveOutfit = async (outfit: OutfitData) => {
     });
 };
 
-const LoadedOutfitData = ({ processedImage }: { processedImage: ProcessedImage }) => {
+const LoadedOutfitData = ({ processedImage }: { processedImage: ProcessedOutfit }) => {
     return (
         <>
             <h2>By: {processedImage.creator}</h2>
             {processedImage.outfits.map((outfit, i) => (
                 <Form.Item key={i}>
-                    <Card cover={<img alt="" style={{ height: "200px", width: "400px" }} src={outfit.image} />}>
+                    <Card cover={<img alt="" style={{ height: "200px", width: "400px" }} src={outfit.outfitImage} />}>
                         <Card.Meta
                             description={
                                 <>
@@ -56,7 +56,7 @@ export const SubmitOutfit = () => {
         outfitSource: "",
         tags: [],
     });
-    const [processedImage, setProcessedImage] = useState<ProcessedImage>();
+    const [processedImage, setProcessedImage] = useState<ProcessedOutfit>();
     const [loading, setLoading] = useState(false);
 
     console.log(formValue);
@@ -83,7 +83,11 @@ export const SubmitOutfit = () => {
                     <Select mode="tags" style={{ width: "100%" }} placeholder="#cool #outfit"></Select>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" onClick={() => saveOutfit({ ...formValue, processedImage })}>
+                    <Button
+                        type="primary"
+                        disabled={!processedImage}
+                        onClick={() => saveOutfit({ ...formValue, processedOutfit: processedImage! })}
+                    >
                         Submit
                     </Button>
                 </Form.Item>
