@@ -68,5 +68,5 @@
         "array-type": false,
         "radix": false
     },
-    "rulesDirectory": ["node_modules/tslint-eslint-rules/dist/rules", "tslint-plugin-prettier"]
+    "rulesDirectory": ["node_modules/tslint-eslint-rules/dist/rules"]
 }
