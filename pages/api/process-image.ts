@@ -26,5 +26,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     }
 
-    res.send("asdf");
+    res.status(400).send({ err: "Please provide a url to process" });
 };

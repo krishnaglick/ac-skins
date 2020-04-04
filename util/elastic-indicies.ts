@@ -1,3 +1,3 @@
 export enum Indicies {
-    outfit = "OUTFIT",
+    outfit = "outfit",
 }

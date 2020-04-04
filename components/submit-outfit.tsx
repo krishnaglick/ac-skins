@@ -80,7 +80,6 @@ export const SubmitOutfit = () => {
                 </Form.Item>
                 {processedImage ? <LoadedOutfitData processedImage={processedImage} /> : null}
                 <Form.Item label="Tags" name="tags">
-                    {/* <Input placeholder="#cool #outfit" /> */}
                     <Select mode="tags" style={{ width: "100%" }} placeholder="#cool #outfit"></Select>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

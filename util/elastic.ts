@@ -12,6 +12,12 @@ class Elastic {
                 password: "elastic",
             },
         });
+
+        Object.values(Indicies).forEach(index => {
+            this.client.create(() => ({
+                index,
+            }));
+        });
     }
 
     async save(index: Indicies, body: OutfitData) {
@@ -22,7 +28,7 @@ class Elastic {
                 body,
             });
             // await this.client.indices.refresh({ index });
-            return "Data Saved Successfully";
+            return { success: "Data Saved Successfully" };
         } catch (err) {
             console.trace("Failed Index Body: ", body);
             console.error("Error Adding Data to Index: ", index, "\n", err);
@@ -30,20 +36,20 @@ class Elastic {
         }
     }
 
-    async get(index: Indicies, title?: string, tags?: string[]) {
-        console.debug({ index, title, tags });
+    async get(index: Indicies, outfitName?: string, tags?: string[]) {
+        console.debug({ index, outfitName, tags });
         try {
             return await this.client.search({
                 index,
                 body: {
                     query: {
-                        match: { title, tags },
+                        match: { outfitName },
                     },
                 },
             });
         } catch (err) {
             console.trace("Failed Index Search");
-            console.trace({ index, title, tags });
+            console.trace({ index, outfitName, tags });
             console.error("Error Searching Index: ", err);
             throw new Error("Unalbe to Search");
         }

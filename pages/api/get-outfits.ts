@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { elasticClient } from "../../util/elastic";
 import { Indicies } from "../../util/elastic-indicies";
-import type { OutfitData } from "../../components/submit-outfit";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { index, body } = req.body as { index: Indicies; body: OutfitData };
+    const { search } = req.query as { search: string };
+    console.log({ search });
     try {
-        res.send(await elasticClient.save(index, body));
+        res.send(await elasticClient.get(Indicies.outfit, search, [search]));
     } catch (err) {
         res.status(400).send({ err });
     }
