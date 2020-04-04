@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Card, Select } from "antd";
+import { Form, Input, Button, Select, message } from "antd";
 import axios from "axios";
 import type { ProcessedOutfit } from "../pages/api/process-image";
 import { Indicies } from "../util/elastic-indicies";
+import { OutfitCards } from "./outfit-card/outfit-card";
 
 const processImage = async (url: string) => {
     if (url.includes("http")) {
-        return (await axios.post<ProcessedOutfit>("/api/process-image", { url })).data;
+        try {
+            return (await axios.post<ProcessedOutfit>("/api/process-image", { url })).data;
+        } catch (err) {
+            message.error(err.err);
+        }
     }
 };
 
@@ -27,66 +32,55 @@ const saveOutfit = async (outfit: OutfitData) => {
     });
 };
 
-const LoadedOutfitData = ({ processedImage }: { processedImage: ProcessedOutfit }) => {
-    return (
-        <>
-            <h2>By: {processedImage.creator}</h2>
-            {processedImage.outfits.map((outfit, i) => (
-                <Form.Item key={i}>
-                    <Card cover={<img alt="" style={{ height: "200px", width: "400px" }} src={outfit.outfitImage} />}>
-                        <Card.Meta
-                            description={
-                                <>
-                                    <div>Creator ID: {outfit.creatorId}</div>
-                                    <div>Outfit ID: {outfit.outfitId}</div>
-                                </>
-                            }
-                        ></Card.Meta>
-                    </Card>
-                </Form.Item>
-            ))}
-            <Form.Item label="Hashtags">{processedImage.hashtags.join(", ")}</Form.Item>
-        </>
-    );
-};
-
 export const SubmitOutfit = () => {
     const [formValue, updateFormValue] = useState<FormData>({
         outfitName: "",
         outfitSource: "",
         tags: [],
     });
-    const [processedImage, setProcessedImage] = useState<ProcessedOutfit>();
+    const [processedOutfit, setProcessedOutfit] = useState<ProcessedOutfit>();
     const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
 
     console.log(formValue);
     return (
         <div>
             <Form initialValues={{}} onValuesChange={(_, formValues) => updateFormValue(formValues as FormData)}>
                 <Form.Item label="Outfit Name" name="outfitName">
-                    <Input placeholder="That Cute Sweater from Friends" />
+                    <Input placeholder="That Cute Sweater from Friends" disabled={loading} />
                 </Form.Item>
                 <Form.Item label="Outfit Source" name="outfitSource">
                     <Input.Search
+                        disabled={loading}
                         placeholder="Twitter, Imgur, Etc"
                         enterButton="Load Outfit"
                         onSearch={async v => {
                             setLoading(true);
-                            setProcessedImage(await processImage(v));
+                            setProcessedOutfit(await processImage(v));
                             setLoading(false);
                         }}
                         loading={loading}
                     />
                 </Form.Item>
-                {processedImage ? <LoadedOutfitData processedImage={processedImage} /> : null}
+                {processedOutfit ? <OutfitCards outfits={[{ ...formValue, processedOutfit }]} /> : null}
                 <Form.Item label="Tags" name="tags">
-                    <Select mode="tags" style={{ width: "100%" }} placeholder="#cool #outfit"></Select>
+                    <Select
+                        mode="tags"
+                        style={{ width: "100%" }}
+                        placeholder="#cool #outfit"
+                        disabled={loading}
+                    ></Select>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button
                         type="primary"
-                        disabled={!processedImage}
-                        onClick={() => saveOutfit({ ...formValue, processedOutfit: processedImage! })}
+                        loading={saving}
+                        disabled={!processedOutfit || loading || saving}
+                        onClick={() => {
+                            setSaving(true);
+                            saveOutfit({ ...formValue, processedOutfit: processedOutfit! });
+                            setSaving(false);
+                        }}
                     >
                         Submit
                     </Button>

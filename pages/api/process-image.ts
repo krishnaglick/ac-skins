@@ -13,6 +13,7 @@ export type ProcessedOutfit = {
         screen_name: string;
         avatar: string;
     };
+    description: string;
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -21,12 +22,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         if (url.includes("twitter")) {
             const tweetId = url.split("/").splice(-1)[0];
             const imageData = await twitterApi.getTweetData(tweetId);
-            const outfit: ProcessedOutfit = {
-                outfits: await Promise.all(imageData.images.map(image => imageProcessor.processImage(image))),
-                hashtags: imageData.hashtags,
-                creator: imageData.creator,
-            };
-            return res.send(outfit);
+            try {
+                const outfit: ProcessedOutfit = {
+                    outfits: await Promise.all(imageData.images.map(image => imageProcessor.processImage(image))),
+                    hashtags: imageData.hashtags,
+                    creator: imageData.creator,
+                    description: imageData.description,
+                };
+                return res.send(outfit);
+            } catch (err) {
+                console.error("Error processing image: ", err);
+                return res.status(500).send({ err: "There was a error processing the image, please try again later" });
+            }
         }
     }
 
