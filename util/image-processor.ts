@@ -1,4 +1,5 @@
 import { createWorker } from "tesseract.js";
+import type { ProcessedOutfit } from "../pages/api/save-outfit";
 
 class ImageProcessor {
     worker = createWorker({
@@ -16,7 +17,7 @@ class ImageProcessor {
         return outfitId;
     };
 
-    processImage = async (outfitImage = "./test-images/eternal-jacket.jpg") => {
+    processImage = async (outfitImage = "./test-images/eternal-jacket.jpg"): Promise<ProcessedOutfit> => {
         await this.worker.load();
         await this.worker.loadLanguage("eng");
         await this.worker.initialize("eng");
@@ -29,6 +30,7 @@ class ImageProcessor {
         if (!creatorId || !outfitId) {
             throw new Error("Error Parsing Image");
         }
+        console.debug("Image Text: ", text);
         return { creatorId, outfitId, outfitImage };
     };
 }
