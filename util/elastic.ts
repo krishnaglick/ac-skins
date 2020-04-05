@@ -1,6 +1,8 @@
 import { Client } from "@elastic/elasticsearch";
 import { Indicies } from "./elastic-indicies";
 import type { OutfitData } from "../pages/api/save-outfit";
+import type { ElasticOutfitData } from "../components/outfit-search";
+import defaultData from "../test-data.json";
 
 class Elastic {
     client: Client;
@@ -18,17 +20,24 @@ class Elastic {
                 index,
             }));
         });
+        defaultData.forEach(data => {
+            this.save(Indicies.outfit, data);
+        });
     }
 
     async save(index: Indicies, body: OutfitData) {
         console.debug({ index, body });
         try {
-            await this.client.index({
-                index,
-                body,
-            });
+            const dupes = await this.getDuplicate(index, body);
+            if (!dupes.length) {
+                await this.client.index({
+                    index,
+                    body,
+                });
+                return { success: "Data Saved Successfully" };
+            }
             // await this.client.indices.refresh({ index });
-            return { success: "Data Saved Successfully" };
+            return { duplicate: dupes.sort((a, b) => b._score - a._score)[0] };
         } catch (err) {
             console.trace("Failed Index Body: ", body);
             console.error("Error Adding Data to Index: ", index, "\n", err);
@@ -36,15 +45,36 @@ class Elastic {
         }
     }
 
-    async get(index: Indicies, outfitName?: string, tags?: string[]): Promise<OutfitData[]> {
+    private async getDuplicate(index: Indicies, body: OutfitData): Promise<ElasticOutfitData[]> {
+        const query = [body.outfitName, body.outfitSource];
+        if (body.tags?.length) {
+            query.push(...body.tags);
+        }
+        if (body.outfitData?.processedOutfits?.[0].outfitId) {
+            query.push(body.outfitData.processedOutfits[0].outfitId);
+        }
+        const queryData = await this.client.search({
+            index,
+            body: {
+                query: {
+                    multi_match: {
+                        query: query.join(" "),
+                    },
+                },
+            },
+        });
+        return queryData.body?.hits?.hits || [];
+    }
+
+    async get(index: Indicies, outfitName?: string, tags?: string[]): Promise<ElasticOutfitData[]> {
         console.debug({ index, outfitName, tags });
         try {
             const queryData = await this.client.search({
                 index,
                 body: {
                     query: {
-                        // match: { tags },
                         match_phrase_prefix: { outfitName },
+                        match: tags?.length ? { tags } : undefined,
                     },
                 },
             });

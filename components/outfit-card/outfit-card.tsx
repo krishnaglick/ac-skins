@@ -4,19 +4,30 @@ import { CopyOutlined } from "@ant-design/icons";
 import { OutfitData } from "../../pages/api/save-outfit";
 import { isTwitterOutfit } from "../../util/typeguards";
 
-type OutfitCardProps = { outfit: OutfitData; showUserData?: boolean };
+type OutfitCardProps = { outfit: OutfitData; showUserData?: boolean; duplicate?: boolean };
+
+const parseTwitterDescription = (desc: string) => {
+    if (typeof window !== "undefined") {
+        const parser = new DOMParser();
+        return parser.parseFromString("<!doctype html><body>" + desc, "text/html").body.textContent;
+    }
+    return desc;
+};
 
 const CardTitle = ({ outfit, showUserData }: OutfitCardProps) => (
     <>{showUserData ? outfit.outfitName : "Outfit Info"}</>
 );
 
-const OutfitCard = ({ outfit, showUserData }: OutfitCardProps) => {
+export const OutfitCard = ({ outfit, showUserData, duplicate }: OutfitCardProps) => {
     console.log("outfit: ", outfit);
-    return (
-        <Row gutter={16}>
-            {outfit.outfitData?.processedOutfits?.map((o, i) => (
+    return outfit.outfitData?.processedOutfits ? (
+        <>
+            {outfit.outfitData.processedOutfits?.map((o, i) => (
                 <Col key={i} span={8}>
-                    <Card style={{ width: 300 }} cover={<img alt={outfit.outfitName} src={o.outfitImage} />}>
+                    <Card
+                        style={{ width: 300, border: "3px solid red" }}
+                        cover={<img alt={outfit.outfitName} src={o.outfitImage} />}
+                    >
                         <List.Item.Meta
                             avatar={
                                 isTwitterOutfit(outfit.outfitData) ? (
@@ -33,7 +44,7 @@ const OutfitCard = ({ outfit, showUserData }: OutfitCardProps) => {
                                             <a target="_blank" href={outfit.outfitSource}>
                                                 {outfit.outfitData.creator.screen_name}
                                             </a>{" "}
-                                            - {outfit.outfitData.twitterDescription}
+                                            - {parseTwitterDescription(outfit.outfitData.twitterDescription)}
                                         </Descriptions.Item>
                                     ) : null}
                                     <Descriptions.Item label="Creator ID">
@@ -69,15 +80,17 @@ const OutfitCard = ({ outfit, showUserData }: OutfitCardProps) => {
                     </Card>
                 </Col>
             ))}
-        </Row>
-    );
+        </>
+    ) : null;
 };
 
 export const OutfitCards = ({ outfits, showUserData }: { outfits: OutfitData[]; showUserData?: boolean }) => {
     return (
         <div style={{ background: "#ECECEC", padding: "30px" }}>
             {outfits.map((outfit, i) => (
-                <OutfitCard showUserData={showUserData} key={i} outfit={outfit} />
+                <Row gutter={16} key={i}>
+                    <OutfitCard showUserData={showUserData} outfit={outfit} />
+                </Row>
             ))}
         </div>
     );

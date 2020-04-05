@@ -4,7 +4,7 @@ import axios from "axios";
 import { OutfitCards } from "./outfit-card/outfit-card";
 import type { OutfitData } from "../pages/api/save-outfit";
 
-type ElasticOutfitData = {
+export type ElasticOutfitData = {
     _id: string;
     _index: string;
     _score: number;

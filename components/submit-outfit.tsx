@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Select, message } from "antd";
+import { Form, Input, Button, Select, message, Row } from "antd";
 import axios from "axios";
 import { Indicies } from "../util/elastic-indicies";
-import { OutfitCards } from "./outfit-card/outfit-card";
+import { OutfitCard } from "./outfit-card/outfit-card";
 import type { ProcessedImageResponse, OutfitData } from "../pages/api/save-outfit";
+import { ElasticOutfitData } from "./outfit-search";
 
 const processImage = async (url: string) => {
     if (url.includes("http")) {
@@ -15,11 +16,27 @@ const processImage = async (url: string) => {
     }
 };
 
-const saveOutfit = async (outfit: OutfitData) => {
-    await axios.post("/api/save-outfit", {
-        index: Indicies.outfit,
-        body: outfit,
-    });
+const saveOutfit = async (
+    outfit: OutfitData,
+    setDupe: React.Dispatch<React.SetStateAction<OutfitData | undefined>>,
+) => {
+    try {
+        const saveData = (
+            await axios.post<{ success?: string; duplicate?: ElasticOutfitData }>("/api/save-outfit", {
+                index: Indicies.outfit,
+                body: outfit,
+            })
+        ).data;
+        if (saveData.success) {
+            return message.success(saveData.success);
+        } else if (saveData.duplicate) {
+            message.warn("It looks like that outfit might exist already!");
+            return setDupe(saveData.duplicate._source);
+        }
+        message.warn("There was an unknown error saving your outfit");
+    } catch (err) {
+        message.error(err.toString());
+    }
 };
 
 export const SubmitOutfit = () => {
@@ -29,10 +46,10 @@ export const SubmitOutfit = () => {
         tags: [],
     });
     const [processedOutfit, setProcessedOutfit] = useState<ProcessedImageResponse>();
+    const [duplicate, setDupe] = useState<OutfitData>();
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
 
-    console.log(formValue);
     return (
         <div>
             <Form initialValues={{}} onValuesChange={(_, formValues) => updateFormValue(formValues as OutfitData)}>
@@ -52,7 +69,12 @@ export const SubmitOutfit = () => {
                         loading={loading}
                     />
                 </Form.Item>
-                {processedOutfit ? <OutfitCards outfits={[{ ...formValue, outfitData: processedOutfit }]} /> : null}
+                {processedOutfit || duplicate ? (
+                    <Row gutter={16}>
+                        {processedOutfit ? <OutfitCard outfit={{ ...formValue, outfitData: processedOutfit }} /> : null}
+                        {duplicate ? <OutfitCard outfit={duplicate} showUserData={true} duplicate={true} /> : null}
+                    </Row>
+                ) : null}
                 <Form.Item label="Tags" name="tags">
                     <Select mode="tags" style={{ width: "100%" }} placeholder="#cool #outfit" disabled={loading} />
                 </Form.Item>
@@ -63,7 +85,7 @@ export const SubmitOutfit = () => {
                         disabled={!processedOutfit || loading || saving}
                         onClick={() => {
                             setSaving(true);
-                            saveOutfit({ ...formValue, outfitData: processedOutfit });
+                            saveOutfit({ ...formValue, outfitData: processedOutfit }, setDupe);
                             setSaving(false);
                         }}
                     >

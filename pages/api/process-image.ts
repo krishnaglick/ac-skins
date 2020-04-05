@@ -10,10 +10,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             const processedImage = await processImage(url);
             res.send(processedImage);
         } catch (err) {
-            res.status(500).send({ err: err.toString() });
+            res.status(500).send(err.toString());
         }
     } else {
-        res.status(400).send({ err: "Please provide a valid url to process" });
+        res.status(400).send("Please provide a valid url to process");
     }
 };
 

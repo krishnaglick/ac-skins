@@ -32,7 +32,13 @@ export type ProcessedImageResponse = TwitterOutfit | { processedOutfits?: Proces
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { index, body } = req.body as { index: Indicies; body: OutfitData };
     try {
-        res.send(await elasticClient.save(index, body));
+        const createdOutfit = await elasticClient.save(index, body);
+        if (createdOutfit.success) {
+            res.status(201);
+        } else {
+            res.status(200);
+        }
+        res.send(createdOutfit);
     } catch (err) {
         res.status(400).send({ err });
     }

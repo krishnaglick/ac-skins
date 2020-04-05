@@ -17,7 +17,7 @@ export const App = ({ pathname }: { pathname: string }) => {
         <Layout className="layout">
             <Router history={history}>
                 <Nav />
-                <Content style={{ padding: "0 50px" }}>
+                <Content style={{ padding: "50px" }}>
                     <div className="site-layout-content">
                         <Switch>
                             <Route path="/" exact={true} component={Home} />
@@ -26,7 +26,9 @@ export const App = ({ pathname }: { pathname: string }) => {
                         </Switch>
                     </div>
                 </Content>
-                <Footer style={{ textAlign: "center" }}>Ant Design ©2018 Created by Ant UED</Footer>
+                <Footer style={{ textAlign: "center" }}>
+                    <a href="https://github.com/krishnaglick/ac-skins">Animal Crossing Outfit on Github</a>
+                </Footer>
             </Router>
         </Layout>
     );
