@@ -28,16 +28,16 @@ class Elastic {
     async save(index: Indicies, body: OutfitData) {
         console.debug({ index, body });
         try {
-            const dupes = await this.getDuplicate(index, body);
-            if (!dupes.length) {
-                await this.client.index({
-                    index,
-                    body,
-                });
-                return { success: "Data Saved Successfully" };
-            }
+            // const dupes = await this.getDuplicate(index, body);
+            // if (!dupes.length) {
+            await this.client.index({
+                index,
+                body,
+            });
+            return { success: "Data Saved Successfully" };
+            // }
             // await this.client.indices.refresh({ index });
-            return { duplicate: dupes.sort((a, b) => b._score - a._score)[0] };
+            // return { duplicate: dupes.sort((a, b) => b._score - a._score)[0] };
         } catch (err) {
             console.trace("Failed Index Body: ", body);
             console.error("Error Adding Data to Index: ", index, "\n", err);
@@ -45,26 +45,26 @@ class Elastic {
         }
     }
 
-    private async getDuplicate(index: Indicies, body: OutfitData): Promise<ElasticOutfitData[]> {
-        const query = [body.outfitName, body.outfitSource];
-        if (body.tags?.length) {
-            query.push(...body.tags);
-        }
-        if (body.outfitData?.processedOutfits?.[0].outfitId) {
-            query.push(body.outfitData.processedOutfits[0].outfitId);
-        }
-        const queryData = await this.client.search({
-            index,
-            body: {
-                query: {
-                    multi_match: {
-                        query: query.join(" "),
-                    },
-                },
-            },
-        });
-        return queryData.body?.hits?.hits || [];
-    }
+    // private async getDuplicate(index: Indicies, body: OutfitData): Promise<ElasticOutfitData[]> {
+    //     const query = [body.outfitName, body.outfitSource];
+    //     if (body.tags?.length) {
+    //         query.push(...body.tags);
+    //     }
+    //     if (body.outfitData?.processedOutfits?.[0].outfitId) {
+    //         query.push(body.outfitData.processedOutfits[0].outfitId);
+    //     }
+    //     const queryData = await this.client.search({
+    //         index,
+    //         body: {
+    //             query: {
+    //                 multi_match: {
+    //                     query: query.join(" "),
+    //                 },
+    //             },
+    //         },
+    //     });
+    //     return queryData.body?.hits?.hits || [];
+    // }
 
     async get(index: Indicies, outfitName?: string, tags?: string[]): Promise<ElasticOutfitData[]> {
         console.debug({ index, outfitName, tags });
