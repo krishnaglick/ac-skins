@@ -25,7 +25,7 @@ export const OutfitCard = ({ outfit, showUserData, duplicate }: OutfitCardProps)
             {outfit.outfitData.processedOutfits?.map((o, i) => (
                 <Col key={i} span={8}>
                     <Card
-                        style={{ width: 300, border: "3px solid red" }}
+                        style={{ width: 300, border: duplicate ? "3px solid red" : undefined }}
                         cover={<img alt={outfit.outfitName} src={o.outfitImage} />}
                     >
                         <List.Item.Meta
