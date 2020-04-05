@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Input } from "antd";
 import axios from "axios";
-import type { OutfitData } from "./submit-outfit";
 import { OutfitCards } from "./outfit-card/outfit-card";
+import type { OutfitData } from "../pages/api/save-outfit";
 
 type ElasticOutfitData = {
     _id: string;
@@ -39,7 +39,7 @@ export const OutfitSearch = () => {
                     setSearching(false);
                 }}
             />
-            {outfits?.length ? <OutfitCards outfits={outfits} /> : null}
+            {outfits?.length ? <OutfitCards outfits={outfits} showUserData={true} /> : null}
         </div>
     );
 };

@@ -1,5 +1,7 @@
 import React from "react";
 import { App } from "../components/client";
+
+// tslint:disable-next-line:no-submodule-imports
 import "antd/dist/antd.css";
 import "./_app.scss";
 

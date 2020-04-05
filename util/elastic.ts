@@ -1,6 +1,6 @@
 import { Client } from "@elastic/elasticsearch";
 import { Indicies } from "./elastic-indicies";
-import type { OutfitData } from "../components/submit-outfit";
+import type { OutfitData } from "../pages/api/save-outfit";
 
 class Elastic {
     client: Client;

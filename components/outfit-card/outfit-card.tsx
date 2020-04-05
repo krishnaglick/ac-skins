@@ -1,32 +1,41 @@
 import React from "react";
-import { Row, Col, Card, message, Descriptions, Avatar, Tag } from "antd";
-import { Meta } from "antd/lib/list/Item";
-import type { OutfitData } from "../submit-outfit";
+import { Row, Col, Card, message, Descriptions, Avatar, Tag, List } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
+import { OutfitData } from "../../pages/api/save-outfit";
+import { isTwitterOutfit } from "../../util/typeguards";
 
 type OutfitCardProps = { outfit: OutfitData; showUserData?: boolean };
 
 const CardTitle = ({ outfit, showUserData }: OutfitCardProps) => (
-    <>Outfit Info{showUserData ? ` - ${outfit.outfitName}` : ""}</>
+    <>{showUserData ? outfit.outfitName : "Outfit Info"}</>
 );
 
 const OutfitCard = ({ outfit, showUserData }: OutfitCardProps) => {
+    console.log("outfit: ", outfit);
     return (
         <Row gutter={16}>
-            {outfit.processedOutfit.outfits.map((o, i) => (
+            {outfit.outfitData?.processedOutfits?.map((o, i) => (
                 <Col key={i} span={8}>
                     <Card style={{ width: 300 }} cover={<img alt={outfit.outfitName} src={o.outfitImage} />}>
-                        <Meta
-                            avatar={<Avatar src={outfit.processedOutfit.creator.avatar} />}
+                        <List.Item.Meta
+                            avatar={
+                                isTwitterOutfit(outfit.outfitData) ? (
+                                    <Avatar src={outfit.outfitData.creator.avatar} />
+                                ) : null
+                            }
                             description={
                                 <Descriptions
                                     title={<CardTitle outfit={outfit} showUserData={showUserData} />}
                                     column={1}
                                 >
-                                    <Descriptions.Item label="Creator">
-                                        <a href={outfit.outfitSource}>{outfit.processedOutfit.creator.screen_name}</a> -{" "}
-                                        {outfit.processedOutfit.description}
-                                    </Descriptions.Item>
+                                    {isTwitterOutfit(outfit.outfitData) ? (
+                                        <Descriptions.Item label="Creator">
+                                            <a target="_blank" href={outfit.outfitSource}>
+                                                {outfit.outfitData.creator.screen_name}
+                                            </a>{" "}
+                                            - {outfit.outfitData.twitterDescription}
+                                        </Descriptions.Item>
+                                    ) : null}
                                     <Descriptions.Item label="Creator ID">
                                         {o.creatorId}{" "}
                                         <CopyOutlined

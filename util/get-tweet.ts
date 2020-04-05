@@ -1,6 +1,7 @@
 import axios from "axios";
-import tweetData from "../data.json";
+import type { TwitterOutfit } from "../pages/api/save-outfit";
 
+import tweetData from "../data.json";
 import { api_key, api_secret_key } from "../env.json";
 
 class Twitter {
@@ -17,10 +18,10 @@ class Twitter {
             },
         });
 
-        this.oAuthToken = oauthToken;
+        return (this.oAuthToken = oauthToken);
     };
 
-    getTweetData = async (tweetId = "1245700771485609984") => {
+    getTweetData = async (tweetId = "1245700771485609984"): Promise<TwitterOutfit> => {
         if (!this.oAuthToken) {
             await this.getOAuthToken();
         }
@@ -41,7 +42,7 @@ class Twitter {
                 screen_name: data.user.screen_name,
                 avatar: data.user.profile_image_url,
             },
-            description: data.text,
+            twitterDescription: data.text,
         };
     };
 }
