@@ -1,8 +1,8 @@
 import axios from "axios";
-import type { TwitterOutfit } from "../pages/api/save-outfit";
 
 import tweetData from "../data.json";
 import { api_key, api_secret_key } from "../env.json";
+import type { TwitterData } from "../pages/api/save-outfit";
 
 class Twitter {
     oAuthToken = "";
@@ -21,7 +21,7 @@ class Twitter {
         return (this.oAuthToken = oauthToken);
     };
 
-    getTweetData = async (tweetId = "1245700771485609984"): Promise<TwitterOutfit> => {
+    getTweetData = async (tweetId = "1245700771485609984"): Promise<TwitterData> => {
         if (!this.oAuthToken) {
             await this.getOAuthToken();
         }

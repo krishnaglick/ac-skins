@@ -1,8 +1,15 @@
 import { Client } from "@elastic/elasticsearch";
 import { Indicies } from "./elastic-indicies";
 import type { OutfitData } from "../pages/api/save-outfit";
-import type { ElasticOutfitData } from "../components/outfit-search";
-import defaultData from "../test-data.json";
+// import defaultData from "../test-data.json";
+
+export type ElasticRecord<T> = {
+    _id: string;
+    _index: string;
+    _score: number;
+    _source: T;
+    _type: string;
+};
 
 class Elastic {
     client: Client;
@@ -20,9 +27,9 @@ class Elastic {
                 index,
             }));
         });
-        defaultData.forEach(data => {
-            this.save(Indicies.outfit, data);
-        });
+        // defaultData.forEach(data => {
+        //     this.save(Indicies.outfit, data);
+        // });
     }
 
     async save(index: Indicies, body: OutfitData) {
@@ -66,22 +73,23 @@ class Elastic {
     //     return queryData.body?.hits?.hits || [];
     // }
 
-    async get(index: Indicies, outfitName?: string, tags?: string[]): Promise<ElasticOutfitData[]> {
-        console.debug({ index, outfitName, tags });
+    async get(index: Indicies, search?: string): Promise<ElasticRecord<OutfitData>[]> {
+        console.debug({ index, search });
         try {
             const queryData = await this.client.search({
                 index,
                 body: {
                     query: {
-                        match_phrase_prefix: { outfitName },
-                        match: tags?.length ? { tags } : undefined,
+                        multi_match: {
+                            query: search,
+                        },
                     },
                 },
             });
             return queryData.body?.hits?.hits || [];
         } catch (err) {
             console.trace("Failed Index Search");
-            console.trace({ index, outfitName, tags });
+            console.trace({ index, search });
             console.error("Error Searching Index: ", err);
             throw new Error("Unalbe to Search");
         }

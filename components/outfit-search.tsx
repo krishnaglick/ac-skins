@@ -3,18 +3,11 @@ import { Input } from "antd";
 import axios from "axios";
 import { OutfitCards } from "./outfit-card/outfit-card";
 import type { OutfitData } from "../pages/api/save-outfit";
-
-export type ElasticOutfitData = {
-    _id: string;
-    _index: string;
-    _score: number;
-    _source: OutfitData;
-    _type: string;
-};
+import type { ElasticRecord } from "../util/elastic";
 
 const searchOutfits = async (searchTerm: string) => {
     try {
-        const { data } = await axios.get<ElasticOutfitData[]>(`/api/get-outfits?search=${searchTerm}`);
+        const { data } = await axios.get<ElasticRecord<OutfitData>[]>(`/api/get-outfits?search=${searchTerm}`);
         return data.sort((a, b) => a._score - b._score).map(({ _source }) => _source);
     } catch (err) {
         console.error(err);

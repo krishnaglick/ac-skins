@@ -2,11 +2,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { elasticClient } from "../../util/elastic";
 import { Indicies } from "../../util/elastic-indicies";
 
-export type ProcessedOutfit = {
+interface ProcessedOutfitData {
     creatorId: string;
     outfitId: string;
     outfitImage: string;
-};
+    twitterData?: TwitterOutfitData;
+}
+
+interface BaseOutfitData extends ProcessedOutfitData {
+    outfitName: string;
+    outfitSource: string;
+    tags: string[];
+}
 
 interface TwitterOutfitData {
     hashtags: string[];
@@ -16,21 +23,15 @@ interface TwitterOutfitData {
         avatar: string;
     };
     twitterDescription: string;
-    processedOutfits?: ProcessedOutfit[];
-}
-interface BaseOutfitData {
-    outfitName: string;
-    outfitSource: string;
-    tags: string[];
-    outfitData?: ProcessedImageResponse;
 }
 
 export type OutfitData = BaseOutfitData;
-export type TwitterOutfit = TwitterOutfitData;
-export type ProcessedImageResponse = TwitterOutfit | { processedOutfits?: ProcessedOutfit[] };
+export type TwitterData = TwitterOutfitData;
+export type ProcessedOutfit = ProcessedOutfitData;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { index, body } = req.body as { index: Indicies; body: OutfitData };
+    console.debug("Body Data: ", body);
     try {
         const createdOutfit = await elasticClient.save(index, body);
         if (createdOutfit.success) {
