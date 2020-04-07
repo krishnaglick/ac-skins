@@ -4,15 +4,15 @@ import axios from "axios";
 import { Indicies } from "../util/elastic-indicies";
 import type { ProcessedDesign, DesignData } from "../pages/api/save-design";
 
-const processImage = async (url: string): Promise<ProcessedDesign> => {
+const processImage = async (url: string): Promise<ProcessedDesign | null> => {
     if (url.includes("http")) {
         try {
             return (await axios.post<ProcessedDesign>("/api/process-image", { url })).data;
         } catch (err) {
-            message.error(err.err);
+            message.error(err?.response?.data || err.toString());
         }
     }
-    return {} as ProcessedDesign;
+    return null;
 };
 
 const saveDesign = async (design: DesignData) => {
@@ -108,9 +108,11 @@ export const SubmitDesign = () => {
                             onSearch={async v => {
                                 setLoading(true);
                                 const processedDesign = await processImage(v);
-                                const newFormValue = { ...formValue, ...processedDesign };
-                                form.setFieldsValue(newFormValue);
-                                updateFormValue(newFormValue); // Setting field values does not trigger onValuesChange
+                                if (processedDesign) {
+                                    const newFormValue = { ...formValue, ...processedDesign };
+                                    form.setFieldsValue(newFormValue);
+                                    updateFormValue(newFormValue); // Setting field values does not trigger onValuesChange
+                                }
                                 setLoading(false);
                             }}
                             loading={loading}
@@ -124,6 +126,11 @@ export const SubmitDesign = () => {
                             disabled={disabled}
                             notFoundContent=""
                             dropdownStyle={{ display: "none" }}
+                            onChange={updatedTags => {
+                                const values = { ...formValue, tags: updatedTags };
+                                form.setFieldsValue(values);
+                                updateFormValue(values as DesignData);
+                            }}
                         />
                         <span>Press enter to add a tag</span>
                     </Form.Item>
@@ -151,7 +158,7 @@ export const SubmitDesign = () => {
                             },
                         ]}
                     >
-                        <Input placeholder="MO-XXXX-XXXX-XXXX" disabled={disabled} />
+                        <Input placeholder="MA-XXXX-XXXX-XXXX" disabled={disabled} />
                     </Form.Item>
                     <Form.Item
                         label="Design Type"

@@ -28,21 +28,25 @@ class ImageProcessor {
         await this.worker.load();
         await this.worker.loadLanguage("eng");
         await this.worker.initialize("eng");
-        let text = "";
+        let creatorId = "";
+        let designId = "";
         let designImage = "";
         for (const image of images) {
             try {
-                text = await this.parseImage(image);
+                const text = await this.parseImage(image);
                 designImage = image;
+                creatorId = this.getCreatorId(text);
+                designId = this.getDesignId(text);
+                console.debug("Image Text: ", text);
+                if (creatorId && designId) {
+                    break;
+                }
             } catch (err) {
                 console.error("Error parsing image: ", image, "\n", err);
             }
         }
 
-        const creatorId = this.getCreatorId(text);
-        const designId = this.getDesignId(text);
         await this.worker.terminate();
-        console.debug("Image Text: ", text);
         if (!creatorId || !designId) {
             throw new Error("No creatorId or design Id found");
         }

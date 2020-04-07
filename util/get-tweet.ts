@@ -26,7 +26,7 @@ class Twitter {
             await this.getOAuthToken();
         }
         const { data } = await axios.get<typeof tweetData>(
-            `https://api.twitter.com/1.1/statuses/show.json?id=${tweetId}`,
+            `https://api.twitter.com/1.1/statuses/show.json?id=${tweetId}&include_entities=true&extended_tweet=true&tweet_mode=extended`,
             {
                 headers: {
                     Authorization: `Bearer ${this.oAuthToken}`,
@@ -34,11 +34,14 @@ class Twitter {
             },
         );
         console.debug("Twitter Data: ", JSON.stringify(data, null, 2));
+        if (!data.extended_entities?.media || !data.entities?.media) {
+            throw new Error("No image data available from twitter, please try linking the image directly");
+        }
         const images = new Set<string>([
-            ...data.extended_entities.media.map(({ media_url }) => media_url),
-            ...data.entities.media.map(({ media_url }) => media_url),
+            ...data.extended_entities?.media.map(({ media_url }) => media_url),
+            ...data.entities?.media.map(({ media_url }) => media_url),
         ]);
-        console.log("asdf: ", Array.from(images));
+
         if (!images.size) {
             throw new Error("Unable to get image data from Twitter");
         }

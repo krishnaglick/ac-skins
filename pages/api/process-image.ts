@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             const processedImage = await processImage(url);
             res.send(processedImage);
         } catch (err) {
-            res.status(500).send(err.toString());
+            res.status(500).send(err.message);
         }
     } else {
         res.status(400).send("Please provide a valid url to process");
@@ -21,7 +21,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 async function processImage(url: string): Promise<ProcessedDesign> {
     try {
         if (["png", "jpg"].some(extension => url.includes(extension))) {
-            return await imageProcessor.processImage([url]);
+            try {
+                return await imageProcessor.processImage([url]);
+            } catch (err) {
+                console.error("Can't process image: ", err, url);
+                return { creatorId: "", designId: "", designImage: url };
+            }
         } else if (url.includes("twitter")) {
             const tweetId = url.split("/").splice(-1)[0];
             const twitterData = await twitterApi.getTweetData(tweetId);

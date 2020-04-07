@@ -13,6 +13,13 @@ const parseTwitterDescription = (desc: string) => {
     return desc;
 };
 
+const TwitterDescription = ({ description }: { description: string }) => {
+    if (description) {
+        return <> - {parseTwitterDescription(description)}</>;
+    }
+    return null;
+};
+
 const CardTitle = ({ design, showUserData }: DesignCardProps) => (
     <>{showUserData ? design.designName : "Design Info"}</>
 );
@@ -31,8 +38,8 @@ export const DesignCard = ({ design, showUserData, duplicate }: DesignCardProps)
                             <Descriptions.Item label="Creator">
                                 <a target="_blank" href={design.designSource}>
                                     {design.twitterData.creator.screen_name}
-                                </a>{" "}
-                                - {parseTwitterDescription(design.twitterData.twitterDescription)}
+                                </a>
+                                <TwitterDescription description={design.twitterData.twitterDescription} />
                             </Descriptions.Item>
                         ) : null}
                         <Descriptions.Item label="Creator ID">
