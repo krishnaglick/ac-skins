@@ -1,6 +1,6 @@
 import { Client } from "@elastic/elasticsearch";
 import { Indicies } from "./elastic-indicies";
-import type { OutfitData } from "../pages/api/save-outfit";
+import type { DesignData } from "../pages/api/save-design";
 // import defaultData from "../test-data.json";
 
 export type ElasticRecord<T> = {
@@ -28,11 +28,11 @@ class Elastic {
             }));
         });
         // defaultData.forEach(data => {
-        //     this.save(Indicies.outfit, data);
+        //     this.save(Indicies.design, data);
         // });
     }
 
-    async save(index: Indicies, body: OutfitData) {
+    async save(index: Indicies, body: DesignData) {
         console.debug({ index, body });
         try {
             // const dupes = await this.getDuplicate(index, body);
@@ -52,13 +52,13 @@ class Elastic {
         }
     }
 
-    // private async getDuplicate(index: Indicies, body: OutfitData): Promise<ElasticOutfitData[]> {
-    //     const query = [body.outfitName, body.outfitSource];
+    // private async getDuplicate(index: Indicies, body: DesignData): Promise<ElasticDesignData[]> {
+    //     const query = [body.designName, body.designSource];
     //     if (body.tags?.length) {
     //         query.push(...body.tags);
     //     }
-    //     if (body.outfitData?.processedOutfits?.[0].outfitId) {
-    //         query.push(body.outfitData.processedOutfits[0].outfitId);
+    //     if (body.designData?.processedDesigns?.[0].designId) {
+    //         query.push(body.designData.processedDesigns[0].designId);
     //     }
     //     const queryData = await this.client.search({
     //         index,
@@ -73,7 +73,7 @@ class Elastic {
     //     return queryData.body?.hits?.hits || [];
     // }
 
-    async get(index: Indicies, search?: string): Promise<ElasticRecord<OutfitData>[]> {
+    async get(index: Indicies, search?: string): Promise<ElasticRecord<DesignData>[]> {
         console.debug({ index, search });
         try {
             const queryData = await this.client.search({

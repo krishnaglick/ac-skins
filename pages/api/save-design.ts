@@ -2,20 +2,21 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { elasticClient } from "../../util/elastic";
 import { Indicies } from "../../util/elastic-indicies";
 
-interface ProcessedOutfitData {
+interface ProcessedDesignData {
     creatorId: string;
-    outfitId: string;
-    outfitImage: string;
-    twitterData?: TwitterOutfitData;
+    designId: string;
+    designImage: string;
+    twitterData?: TwitterDesignData;
 }
 
-interface BaseOutfitData extends ProcessedOutfitData {
-    outfitName: string;
-    outfitSource: string;
+interface BaseDesignData extends ProcessedDesignData {
+    designName: string;
+    designSource: string;
+    designType: Indicies;
     tags: string[];
 }
 
-interface TwitterOutfitData {
+interface TwitterDesignData {
     hashtags: string[];
     images: string[];
     creator: {
@@ -25,21 +26,21 @@ interface TwitterOutfitData {
     twitterDescription: string;
 }
 
-export type OutfitData = BaseOutfitData;
-export type TwitterData = TwitterOutfitData;
-export type ProcessedOutfit = ProcessedOutfitData;
+export type DesignData = BaseDesignData;
+export type TwitterData = TwitterDesignData;
+export type ProcessedDesign = ProcessedDesignData;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { index, body } = req.body as { index: Indicies; body: OutfitData };
+    const { index, body } = req.body as { index: Indicies; body: DesignData };
     console.debug("Body Data: ", body);
     try {
-        const createdOutfit = await elasticClient.save(index, body);
-        if (createdOutfit.success) {
+        const createdDesign = await elasticClient.save(index, body);
+        if (createdDesign.success) {
             res.status(201);
         } else {
             res.status(200);
         }
-        res.send(createdOutfit);
+        res.send(createdDesign);
     } catch (err) {
         res.status(400).send({ err });
     }

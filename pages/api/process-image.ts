@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { twitterApi } from "../../util/get-tweet";
 import { imageProcessor } from "../../util/image-processor";
-import type { ProcessedOutfit } from "./save-outfit";
+import type { ProcessedDesign } from "./save-design";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { url } = req.body as { url?: string };
@@ -18,20 +18,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 // TODO: Some generate/yield magic to give a progress bar
-async function processImage(url: string): Promise<ProcessedOutfit> {
+async function processImage(url: string): Promise<ProcessedDesign> {
     try {
-        if ([".png", ".jpg"].some(extension => url.includes(extension))) {
-            return await imageProcessor.processImage(url);
+        if (["png", "jpg"].some(extension => url.includes(extension))) {
+            return await imageProcessor.processImage([url]);
         } else if (url.includes("twitter")) {
             const tweetId = url.split("/").splice(-1)[0];
             const twitterData = await twitterApi.getTweetData(tweetId);
-            let imageData: ProcessedOutfit | undefined;
-            for (const image of twitterData.images) {
-                try {
-                    imageData = await imageProcessor.processImage(image);
-                } catch (err) {
-                    console.debug("Error Processing Image: ", image);
-                }
+            let imageData: ProcessedDesign | undefined;
+            console.log("twitterData.images: ", twitterData.images);
+            try {
+                imageData = await imageProcessor.processImage(twitterData.images);
+            } catch (err) {
+                console.debug("Error Processing Images: ", twitterData.images, "\n", err);
             }
 
             if (imageData) {
@@ -44,7 +43,7 @@ async function processImage(url: string): Promise<ProcessedOutfit> {
             // TODO: Probably need the imgur API
             // const imgurId = url.split("/").splice[-1][0];
             // return {
-            //     processedOutfits: [
+            //     processedDesigns: [
             //         // Try imgur as a jpg, then a png
             //         await imageProcessor
             //             .processImage(`https://i.imgur.com/${imgurId}.png`)
@@ -55,6 +54,6 @@ async function processImage(url: string): Promise<ProcessedOutfit> {
         throw new Error("No scheme to process url");
     } catch (err) {
         console.error("Error processing image: ", err);
-        throw new Error("There was a error processing the image, please try again later");
+        throw err;
     }
 }

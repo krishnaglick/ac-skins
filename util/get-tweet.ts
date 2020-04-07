@@ -2,7 +2,7 @@ import axios from "axios";
 
 import tweetData from "../data.json";
 import { api_key, api_secret_key } from "../env.json";
-import type { TwitterData } from "../pages/api/save-outfit";
+import type { TwitterData } from "../pages/api/save-design";
 
 class Twitter {
     oAuthToken = "";
@@ -33,11 +33,19 @@ class Twitter {
                 },
             },
         );
-        const hashtags = data.entities.hashtags.map(h => h.text);
-        const images = data.entities.media.map(media => media.media_url);
+        console.debug("Twitter Data: ", JSON.stringify(data, null, 2));
+        const images = new Set<string>([
+            ...data.extended_entities.media.map(({ media_url }) => media_url),
+            ...data.entities.media.map(({ media_url }) => media_url),
+        ]);
+        console.log("asdf: ", Array.from(images));
+        if (!images.size) {
+            throw new Error("Unable to get image data from Twitter");
+        }
+        const hashtags = data.entities.hashtags?.map(h => h.text);
         return {
             hashtags,
-            images,
+            images: Array.from(images),
             creator: {
                 screen_name: data.user.screen_name,
                 avatar: data.user.profile_image_url,

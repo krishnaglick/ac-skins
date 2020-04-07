@@ -1,5 +1,5 @@
 import { createWorker } from "tesseract.js";
-import type { ProcessedOutfit } from "../pages/api/save-outfit";
+import type { ProcessedDesign } from "../pages/api/save-design";
 
 class ImageProcessor {
     worker = createWorker({
@@ -11,27 +11,42 @@ class ImageProcessor {
         return creatorId;
     };
 
-    private getOutfitId = (text: string) => {
-        const outfitIdRegex = /MO-([0-Z]{4})-([0-Z]{4})-([0-Z]{4})/;
-        const [outfitId] = outfitIdRegex.exec(text) || [];
-        return outfitId;
+    private getDesignId = (text: string) => {
+        const designIdRegex = /MO-([0-Z]{4})-([0-Z]{4})-([0-Z]{4})/;
+        const [designId] = designIdRegex.exec(text) || [];
+        return designId;
     };
 
-    processImage = async (outfitImage = "./test-images/eternal-jacket.jpg"): Promise<ProcessedOutfit> => {
+    private parseImage = async (image: string) => {
+        const {
+            data: { text },
+        } = await this.worker.recognize(image);
+        return text;
+    };
+
+    processImage = async (images = ["./test-images/eternal-jacket.jpg"]): Promise<ProcessedDesign> => {
         await this.worker.load();
         await this.worker.loadLanguage("eng");
         await this.worker.initialize("eng");
-        const {
-            data: { text },
-        } = await this.worker.recognize(outfitImage);
-        const creatorId = this.getCreatorId(text);
-        const outfitId = this.getOutfitId(text);
-        await this.worker.terminate();
-        if (!creatorId || !outfitId) {
-            throw new Error("Error Parsing Image");
+        let text = "";
+        let designImage = "";
+        for (const image of images) {
+            try {
+                text = await this.parseImage(image);
+                designImage = image;
+            } catch (err) {
+                console.error("Error parsing image: ", image, "\n", err);
+            }
         }
+
+        const creatorId = this.getCreatorId(text);
+        const designId = this.getDesignId(text);
+        await this.worker.terminate();
         console.debug("Image Text: ", text);
-        return { creatorId, outfitId, outfitImage };
+        if (!creatorId || !designId) {
+            throw new Error("No creatorId or design Id found");
+        }
+        return { creatorId, designId, designImage };
     };
 }
 

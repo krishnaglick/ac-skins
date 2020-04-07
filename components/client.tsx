@@ -4,8 +4,8 @@ import { createBrowserHistory, createMemoryHistory } from "history";
 import { Layout } from "antd";
 import { Nav } from "./nav/nav";
 import { Home } from "./home";
-import { OutfitSearch } from "./outfit-search";
-import { SubmitOutfit } from "./submit-outfit";
+import { DesignSearch } from "./design-search";
+import { SubmitDesign } from "./submit-design";
 
 const { Content, Footer } = Layout;
 
@@ -21,13 +21,13 @@ export const App = ({ pathname }: { pathname: string }) => {
                     <div className="site-layout-content">
                         <Switch>
                             <Route path="/" exact={true} component={Home} />
-                            <Route path="/outfit-search" exact={true} component={OutfitSearch} />
-                            <Route path="/submit-outfit" exact={true} component={SubmitOutfit} />
+                            <Route path="/design-search" exact={true} component={DesignSearch} />
+                            <Route path="/submit-design" exact={true} component={SubmitDesign} />
                         </Switch>
                     </div>
                 </Content>
                 <Footer style={{ textAlign: "center" }}>
-                    <a href="https://github.com/krishnaglick/ac-skins">Animal Crossing Outfit on Github</a>
+                    <a href="https://github.com/krishnaglick/ac-skins">Animal Crossing Design on Github</a>
                 </Footer>
             </Router>
         </Layout>

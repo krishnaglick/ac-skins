@@ -1,9 +1,9 @@
 import React from "react";
 import { Row, Col, Card, message, Descriptions, Avatar, Tag, List } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
-import { OutfitData } from "../../pages/api/save-outfit";
+import { DesignData } from "../../pages/api/save-design";
 
-type OutfitCardProps = { outfit: OutfitData; showUserData?: boolean; duplicate?: boolean };
+type DesignCardProps = { design: DesignData; showUserData?: boolean; duplicate?: boolean };
 
 const parseTwitterDescription = (desc: string) => {
     if (typeof window !== "undefined") {
@@ -13,49 +13,49 @@ const parseTwitterDescription = (desc: string) => {
     return desc;
 };
 
-const CardTitle = ({ outfit, showUserData }: OutfitCardProps) => (
-    <>{showUserData ? outfit.outfitName : "Outfit Info"}</>
+const CardTitle = ({ design, showUserData }: DesignCardProps) => (
+    <>{showUserData ? design.designName : "Design Info"}</>
 );
 
-export const OutfitCard = ({ outfit, showUserData, duplicate }: OutfitCardProps) => {
+export const DesignCard = ({ design, showUserData, duplicate }: DesignCardProps) => {
     return (
         <Card
             style={{ width: 300, border: duplicate ? "3px solid red" : undefined }}
-            cover={<img alt={outfit.outfitName} src={outfit.outfitImage} />}
+            cover={<img alt={design.designName} src={design.designImage} />}
         >
             <List.Item.Meta
-                avatar={outfit.twitterData ? <Avatar src={outfit.twitterData.creator.avatar} /> : null}
+                avatar={design.twitterData ? <Avatar src={design.twitterData.creator.avatar} /> : null}
                 description={
-                    <Descriptions title={<CardTitle outfit={outfit} showUserData={showUserData} />} column={1}>
-                        {outfit.twitterData ? (
+                    <Descriptions title={<CardTitle design={design} showUserData={showUserData} />} column={1}>
+                        {design.twitterData ? (
                             <Descriptions.Item label="Creator">
-                                <a target="_blank" href={outfit.outfitSource}>
-                                    {outfit.twitterData.creator.screen_name}
+                                <a target="_blank" href={design.designSource}>
+                                    {design.twitterData.creator.screen_name}
                                 </a>{" "}
-                                - {parseTwitterDescription(outfit.twitterData.twitterDescription)}
+                                - {parseTwitterDescription(design.twitterData.twitterDescription)}
                             </Descriptions.Item>
                         ) : null}
                         <Descriptions.Item label="Creator ID">
-                            {outfit.creatorId}{" "}
+                            {design.creatorId}{" "}
                             <CopyOutlined
                                 onClick={() => {
-                                    navigator.clipboard.writeText(outfit.creatorId);
+                                    navigator.clipboard.writeText(design.creatorId);
                                     message.success("Copied");
                                 }}
                             />
                         </Descriptions.Item>
-                        <Descriptions.Item label="Outfit ID">
-                            {outfit.outfitId}{" "}
+                        <Descriptions.Item label="Design ID">
+                            {design.designId}{" "}
                             <CopyOutlined
                                 onClick={() => {
-                                    navigator.clipboard.writeText(outfit.outfitId);
+                                    navigator.clipboard.writeText(design.designId);
                                     message.success("Copied");
                                 }}
                             />
                         </Descriptions.Item>
                         {showUserData ? (
                             <Descriptions.Item label="tags">
-                                {outfit.tags.map((tag, n) => (
+                                {design.tags.map((tag, n) => (
                                     <Tag color="blue" key={n}>
                                         {tag}
                                     </Tag>
@@ -69,13 +69,13 @@ export const OutfitCard = ({ outfit, showUserData, duplicate }: OutfitCardProps)
     );
 };
 
-export const OutfitCards = ({ outfits, showUserData }: { outfits: OutfitData[]; showUserData?: boolean }) => {
+export const DesignCards = ({ designs, showUserData }: { designs: DesignData[]; showUserData?: boolean }) => {
     return (
         <div style={{ background: "#ECECEC", padding: "30px" }}>
             <Row gutter={16}>
-                {outfits.map((outfit, i) => (
+                {designs.map((design, i) => (
                     <Col span={8} key={i}>
-                        <OutfitCard showUserData={showUserData} outfit={outfit} />
+                        <DesignCard showUserData={showUserData} design={design} />
                     </Col>
                 ))}
             </Row>

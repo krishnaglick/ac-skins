@@ -13,11 +13,11 @@ export const Nav = withRouter(({ location }) => {
                 <Menu.Item key="home">
                     <Link to="/">Home</Link>
                 </Menu.Item>
-                <Menu.Item key="outfit-search">
-                    <Link to="/outfit-search">Outfit Search</Link>
+                <Menu.Item key="design-search">
+                    <Link to="/design-search">Design Search</Link>
                 </Menu.Item>
-                <Menu.Item key="submit-outfit">
-                    <Link to="/submit-outfit">Submit an Outfit</Link>
+                <Menu.Item key="submit-design">
+                    <Link to="/submit-design">Submit a Design</Link>
                 </Menu.Item>
             </Menu>
         </Header>
