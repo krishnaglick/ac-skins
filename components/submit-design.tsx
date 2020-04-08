@@ -18,22 +18,22 @@ const processImage = async (url: string): Promise<ProcessedDesign | null> => {
 const saveDesign = async (design: DesignData) => {
     try {
         const saveData = (
-            await axios.post<{ success?: string; duplicate?: any }>("/api/save-design", {
+            await axios.post<{ success?: boolean; message?: string }>("/api/save-design", {
                 index: design.designType,
                 body: design,
             })
         ).data;
         if (saveData.success) {
             message.success(saveData.success);
-            return { success: true };
-        } else if (saveData.duplicate) {
+            return true;
+        } else if (saveData.message) {
             message.warn("It looks like that design might exist already!");
-            return { success: false };
+            return false;
         }
         message.warn("There was an unknown error saving your design");
     } catch (err) {
         message.error(err.toString());
-        return { success: true, err: true };
+        return false;
     }
 };
 
@@ -48,6 +48,7 @@ const defaultFormData: DesignData = {
 };
 Object.freeze(defaultFormData);
 
+// TODO: Some kinda magic to make this form generate one per image in a tweet
 export const SubmitDesign = () => {
     const [formValue, updateFormValue] = useState<DesignData>(defaultFormData);
     const [form] = Form.useForm();
@@ -197,8 +198,8 @@ export const SubmitDesign = () => {
                                 form.validateFields()
                                     .then(async () => {
                                         setSaving(true);
-                                        const saveResult = await saveDesign(formValue);
-                                        if (saveResult?.success) {
+                                        const saveSuccess = await saveDesign(formValue);
+                                        if (saveSuccess) {
                                             updateFormValue(defaultFormData);
                                             form.resetFields();
                                         }

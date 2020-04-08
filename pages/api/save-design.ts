@@ -38,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         if (createdDesign.success) {
             res.status(201);
         } else {
-            res.status(200);
+            res.status(200).send(createdDesign);
         }
         res.send(createdDesign);
     } catch (err) {

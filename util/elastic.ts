@@ -1,7 +1,7 @@
 import { Client } from "@elastic/elasticsearch";
 import { Indicies } from "./elastic-indicies";
 import type { DesignData } from "../pages/api/save-design";
-// import defaultData from "../test-data.json";
+import primingData from "../prime-data.json";
 
 export type ElasticRecord<T> = {
     _id: string;
@@ -27,24 +27,19 @@ class Elastic {
                 index,
             }));
         });
-        // defaultData.forEach(data => {
-        //     this.save(Indicies.design, data);
-        // });
     }
 
     async save(index: Indicies, body: DesignData) {
         console.debug({ index, body });
         try {
-            // const dupes = await this.getDuplicate(index, body);
-            // if (!dupes.length) {
-            await this.client.index({
-                index,
-                body,
-            });
-            return { success: "Data Saved Successfully" };
-            // }
-            // await this.client.indices.refresh({ index });
-            // return { duplicate: dupes.sort((a, b) => b._score - a._score)[0] };
+            if (!(await this.haveDesign(index, body.designId))) {
+                await this.client.index({
+                    index,
+                    body,
+                });
+                return { success: true, message: "Data Saved Successfully" };
+            }
+            return { success: false, message: "Design already exists" };
         } catch (err) {
             console.trace("Failed Index Body: ", body);
             console.error("Error Adding Data to Index: ", index, "\n", err);
@@ -52,26 +47,37 @@ class Elastic {
         }
     }
 
-    // private async getDuplicate(index: Indicies, body: DesignData): Promise<ElasticDesignData[]> {
-    //     const query = [body.designName, body.designSource];
-    //     if (body.tags?.length) {
-    //         query.push(...body.tags);
-    //     }
-    //     if (body.designData?.processedDesigns?.[0].designId) {
-    //         query.push(body.designData.processedDesigns[0].designId);
-    //     }
-    //     const queryData = await this.client.search({
-    //         index,
-    //         body: {
-    //             query: {
-    //                 multi_match: {
-    //                     query: query.join(" "),
-    //                 },
-    //             },
-    //         },
-    //     });
-    //     return queryData.body?.hits?.hits || [];
-    // }
+    async primeData() {
+        for (const data of primingData) {
+            try {
+                const isDupe = await this.haveDesign(Indicies.Outfit, data.designId);
+                if (isDupe) {
+                    console.log("Dupe Found");
+                } else {
+                    console.log("No Dupe Found");
+                    this.save(Indicies.Outfit, data as DesignData);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    }
+
+    private haveDesign = async (index: Indicies, designId: string) => {
+        const hits: ElasticRecord<DesignData>[] = (
+            await this.client.search({
+                index,
+                body: {
+                    query: {
+                        match: {
+                            designId,
+                        },
+                    },
+                },
+            })
+        ).body?.hits?.hits;
+        return hits.some(hit => hit._source.designId === designId);
+    };
 
     async get(index: Indicies, search?: string): Promise<ElasticRecord<DesignData>[]> {
         console.debug({ index, search });
