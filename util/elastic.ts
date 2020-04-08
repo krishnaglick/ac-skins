@@ -15,17 +15,11 @@ class Elastic {
     client: Client;
     constructor() {
         this.client = new Client({
-            node: process.env.ELASTIC || "http://localhost:9200",
+            node: process.env.ELASTIC ? `http://${process.env.ELASTIC}:9200` : "http://localhost:9200",
             auth: {
                 username: "elastic",
                 password: "elastic",
             },
-        });
-
-        Object.values(Indicies).forEach(index => {
-            this.client.create(() => ({
-                index,
-            }));
         });
     }
 
@@ -48,6 +42,7 @@ class Elastic {
     }
 
     async primeData() {
+        this.createIndicies();
         for (const data of primingData) {
             try {
                 const isDupe = await this.haveDesign(Indicies.Outfit, data.designId);
@@ -63,20 +58,33 @@ class Elastic {
         }
     }
 
-    private haveDesign = async (index: Indicies, designId: string) => {
-        const hits: ElasticRecord<DesignData>[] = (
-            await this.client.search({
+    private createIndicies() {
+        for (const index of Object.values(Indicies)) {
+            this.client.create(() => ({
                 index,
-                body: {
-                    query: {
-                        match: {
-                            designId,
+            }));
+        }
+    }
+
+    private haveDesign = async (index: Indicies, designId: string) => {
+        try {
+            const hits: ElasticRecord<DesignData>[] = (
+                await this.client.search({
+                    index,
+                    body: {
+                        query: {
+                            match: {
+                                designId,
+                            },
                         },
                     },
-                },
-            })
-        ).body?.hits?.hits;
-        return hits.some(hit => hit._source.designId === designId);
+                })
+            ).body?.hits?.hits;
+            return hits.some(hit => hit._source.designId === designId);
+        } catch (err) {
+            console.error("Error checking for design: ", err);
+            return false;
+        }
     };
 
     async get(index: Indicies, search?: string): Promise<ElasticRecord<DesignData>[]> {

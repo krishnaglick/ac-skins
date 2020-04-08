@@ -1,6 +1,6 @@
 version: '3'
 services:
-  web:
+  ac-outfits:
     build: .
     ports:
       - "3000:3000"
