@@ -15,7 +15,7 @@ class Elastic {
     client: Client;
     constructor() {
         this.client = new Client({
-            node: process.env.ELASTIC ? `http://${process.env.ELASTIC}:9200` : "http://localhost:9200",
+            node: "http://localhost:9200",
             auth: {
                 username: "elastic",
                 password: "elastic",
