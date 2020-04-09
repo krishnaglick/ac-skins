@@ -7,7 +7,7 @@
     "start": "next start",
     "dev": "next",
     "build": "next build",
-    "prod": "pm2 start npm --name \"next\" -- start -p 80",
+    "prod": "pm2 start yarn --interpreter bash --name ac-outfits -- start -p 80",
     "type-check": "tsc"
   },
   "dependencies": {
