@@ -1,12 +1,14 @@
 import axios from "axios";
 
 import tweetData from "../data.json";
-import { api_key, api_secret_key } from "../env.json";
 import type { TwitterData } from "../pages/api/save-design";
+import { getEnvironmentValue } from "./env";
 
 class Twitter {
     oAuthToken = "";
     getOAuthToken = async () => {
+        const api_key = getEnvironmentValue("api_key");
+        const api_secret_key = getEnvironmentValue("api_secret_key");
         const {
             data: { access_token: oauthToken },
         } = await axios.post<{
