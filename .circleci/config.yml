@@ -16,6 +16,3 @@ workflows:
     build-test-deploy:
       jobs:
         - build-test-deploy
-    deploy:
-      jobs:
-        - deploy
