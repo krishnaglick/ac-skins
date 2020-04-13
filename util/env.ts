@@ -3,7 +3,7 @@ export const getEnvironmentValue = (env: string): string | undefined => {
         return process.env[env];
     }
     try {
-        return import("../env.json")[env];
+        return require("../env.json")[env];
     } catch (err) {
         console.error(err);
     }
