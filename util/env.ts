@@ -1,6 +1,1 @@
-export const getEnvironmentValue = (env: string) => {
-    if (process.env[env]) {
-        return process.env[env];
-    }
-    return import("../env.json")[env];
-};
+export const getEnvironmentValue = (env: string) => process.env[env] || import("../env.json")[env];
