@@ -11,7 +11,15 @@ jobs:
           steps:
             - run: yarn
             - run: yarn build
+
+  deploy:
+    steps:
+      - checkout
+      - run: ssh -oStrictHostKeyChecking=no -v root@$159.89.239.206 "./deploy.sh"
 workflows:
     build-and-test:
       jobs:
         - build-and-test
+    deploy:
+      jobs:
+        - deploy
