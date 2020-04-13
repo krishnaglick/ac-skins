@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@1.1.6
+  shellcheck: circleci/shellcheck@x.y.z
 jobs:
   build-and-test:
     executor:
@@ -13,6 +14,8 @@ jobs:
             - run: yarn build
 
   deploy:
+    executor:
+      name: shellcheck/check
     steps:
       - checkout
       - run: ssh -oStrictHostKeyChecking=no -v root@$159.89.239.206 "./deploy.sh"
