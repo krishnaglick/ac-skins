@@ -1,4 +1,10 @@
-export const getEnvironmentValue = (env: string) => {
-    console.log("asdf: ", Object.keys(process.env));
-    return process.env[env] || import("../env.json")[env];
+export const getEnvironmentValue = (env: string): string | undefined => {
+    if (process.env[env]) {
+        return process.env[env];
+    }
+    try {
+        return import("../env.json")[env];
+    } catch (err) {
+        console.error(err);
+    }
 };
