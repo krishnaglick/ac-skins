@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~
+cd ~/ac-skins
 git pull
 yarn
 yarn prod
