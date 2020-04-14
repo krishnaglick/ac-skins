@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Deploy Over SSH
           command: |
-            ssh $SSH_USER@$SSH_HOST "cd ac-skins && source ~/.bashrc && ./deploy.sh"
+            ssh $SSH_USER@$SSH_HOST "cd ac-skins && ./deploy.sh"
 workflows:
   build-and-deploy:
     jobs:

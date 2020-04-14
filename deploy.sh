@@ -1,4 +1,4 @@
 #!/bin/bash
 git pull
-npm install
-npm run prod
+chmod +x ./start.sh
+./start.sh
