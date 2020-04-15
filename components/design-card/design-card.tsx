@@ -31,7 +31,7 @@ export const DesignCard = ({ design, showUserData, duplicate }: DesignCardProps)
             cover={<img alt={design.designName} src={design.designImage} />}
         >
             <List.Item.Meta
-                avatar={design.twitterData ? <Avatar src={design.twitterData.creator.avatar} /> : null}
+                avatar={design.twitterData?.creator.avatar ? <Avatar src={design.twitterData.creator.avatar} /> : null}
                 description={
                     <Descriptions title={<CardTitle design={design} showUserData={showUserData} />} column={1}>
                         {design.twitterData ? (
@@ -76,12 +76,20 @@ export const DesignCard = ({ design, showUserData, duplicate }: DesignCardProps)
     );
 };
 
+const colSizes = {
+    xs: 24,
+    sm: 18,
+    md: 18,
+    lg: 6,
+    xl: 4,
+};
+
 export const DesignCards = ({ designs, showUserData }: { designs: DesignData[]; showUserData?: boolean }) => {
     return (
         <div style={{ background: "#ECECEC", padding: "30px" }}>
             <Row gutter={16}>
                 {designs.map((design, i) => (
-                    <Col span={8} key={i}>
+                    <Col span={8} key={i} {...colSizes}>
                         <DesignCard showUserData={showUserData} design={design} />
                     </Col>
                 ))}

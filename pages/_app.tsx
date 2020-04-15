@@ -1,17 +1,23 @@
 import React from "react";
-import { App } from "../components/client";
+import { Layout } from "antd";
+import { Nav } from "../components/nav/nav";
+const { Content, Footer } = Layout;
 
-// tslint:disable-next-line:no-submodule-imports
 import "antd/dist/antd.css";
 import "./_app.scss";
 
-export default class ServerApp extends React.Component<{ pathname: string }> {
-    // Next.js's prop for this isn't accurate
-    static getInitialProps({ router }: { router: { pathname: string } }) {
-        return { pathname: router.pathname };
-    }
-
-    render() {
-        return <App pathname={this.props.pathname} />;
-    }
-}
+export default ({ Component, pageProps }: any) => {
+    return (
+        <Layout className="layout">
+            <Nav />
+            <Content style={{ padding: "50px" }}>
+                <div className="site-layout-content">
+                    <Component {...pageProps} />
+                </div>
+            </Content>
+            <Footer style={{ textAlign: "center" }}>
+                <a href="https://github.com/krishnaglick/ac-skins">Animal Crossing Design on Github</a>
+            </Footer>
+        </Layout>
+    );
+};

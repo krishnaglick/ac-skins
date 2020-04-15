@@ -48,6 +48,14 @@ const defaultFormData: DesignData = {
 };
 Object.freeze(defaultFormData);
 
+const colSizes = {
+    xs: 24,
+    sm: 24,
+    md: 24,
+    lg: 24,
+    xl: 12,
+};
+
 // TODO: Some kinda magic to make this form generate one per image in a tweet
 export const SubmitDesign = () => {
     const [formValue, updateFormValue] = useState<DesignData>(defaultFormData);
@@ -59,14 +67,6 @@ export const SubmitDesign = () => {
     const disabled = useMemo(() => loading || saving, [loading, saving]);
 
     console.log("formValue: ", formValue);
-
-    const colSizes = {
-        xs: 24,
-        sm: 24,
-        md: 24,
-        lg: 24,
-        xl: 12,
-    };
 
     return (
         <Form

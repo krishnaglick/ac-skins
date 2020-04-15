@@ -18,17 +18,7 @@
         "no-duplicate-imports": false,
         "no-var-keyword": true,
         "no-var-requires": true,
-        "no-submodule-imports": [
-            true,
-            "core-js",
-            "@storybook",
-            "spinkit",
-            "io-ts",
-            "react-dom",
-            "react-toastify",
-            "lazysizes",
-            "fp-ts"
-        ],
+        "no-submodule-imports": false,
         "no-console": false,
         "no-this-assignment": false,
         "interface-name": false,

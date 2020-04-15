@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "antd";
 import axios from "axios";
 import { DesignCards } from "./design-card/design-card";
+import { useRouter } from "next/router";
 import type { DesignData } from "../pages/api/save-design";
 import type { ElasticRecord } from "../util/elastic";
 
@@ -16,6 +17,8 @@ const searchDesigns = async (searchTerm: string) => {
 };
 
 export const DesignSearch = () => {
+    const router = useRouter();
+    console.log("router: ", router);
     const [designs, setDesigns] = useState<DesignData[]>([]);
     const [searching, setSearching] = useState(false);
     console.log({ designs });
@@ -36,3 +39,5 @@ export const DesignSearch = () => {
         </div>
     );
 };
+
+export default DesignSearch;

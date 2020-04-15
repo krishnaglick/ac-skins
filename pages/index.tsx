@@ -1,3 +1,3 @@
-import App from "./_app";
-
-export default App;
+import React from "react";
+export const Home = () => <>Home</>;
+export default Home;
