@@ -15,7 +15,7 @@ const getSearchUrl = (searchTerm: string) => {
     return apiPath;
 };
 
-const searchDesigns = async (searchTerm: string) => {
+export const searchDesigns = async (searchTerm: string) => {
     try {
         const { data } = await axios.get<ElasticRecord<DesignData>[]>(getSearchUrl(searchTerm));
         return data.sort((a, b) => a._score - b._score).map(({ _source }) => _source);

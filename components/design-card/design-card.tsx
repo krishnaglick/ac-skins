@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Card, message, Descriptions, Avatar, Tag, List } from "antd";
+import { Row, Col, Card, message, Descriptions, Avatar, Tag, List, Pagination } from "antd";
 import { CopyOutlined, ShareAltOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 import { DesignData } from "../../pages/api/save-design";
 import { favorites } from "../../util/favorites";
 
-type DesignCardProps = { design: DesignData; showUserData?: boolean; duplicate?: boolean };
+type DesignCardProps = { design: DesignData; showUserData?: boolean; showActions?: boolean };
 
 const parseTwitterDescription = (desc: string) => {
     if (typeof window !== "undefined") {
@@ -25,7 +25,7 @@ const CardTitle = ({ design, showUserData }: DesignCardProps) => (
     <>{showUserData ? design.designName : "Design Info"}</>
 );
 
-export const DesignCard = ({ design, showUserData }: DesignCardProps) => {
+export const DesignCard = ({ design, showUserData, showActions = true }: DesignCardProps) => {
     const [cardFavorited, favorite] = useState(false);
     useEffect(() => {
         // Calling this in here because setting the value in useState caused reconciliation issues
@@ -55,7 +55,7 @@ export const DesignCard = ({ design, showUserData }: DesignCardProps) => {
                 ) : (
                     <StarOutlined key="favorite" onClick={() => favorite(!cardFavorited)} />
                 ),
-            ]}
+            ].filter(() => showActions)}
         >
             <List.Item.Meta
                 avatar={design.twitterData?.creator.avatar ? <Avatar src={design.twitterData.creator.avatar} /> : null}
@@ -111,13 +111,36 @@ const colSizes = {
     xl: 6,
 };
 
-export const DesignCards = ({ designs, showUserData }: { designs: DesignData[]; showUserData?: boolean }) => {
+const pageSize = 8;
+
+export const DesignCards = ({
+    designs,
+    showUserData,
+    colSizesOverride,
+    showActions = true,
+}: {
+    designs: DesignData[];
+    showUserData?: boolean;
+    colSizesOverride?: { [key: string]: number };
+    showActions?: boolean;
+}) => {
+    const [page, setPage] = useState(0);
+    const pageOffset = page * pageSize;
+
     return (
         <div style={{ background: "#ECECEC", padding: "30px" }}>
+            {designs.length > pageSize ? (
+                <Pagination
+                    current={page + 1}
+                    pageSize={pageSize}
+                    total={designs.length}
+                    onChange={pageNumber => setPage(pageNumber - 1)}
+                />
+            ) : null}
             <Row gutter={16}>
-                {designs.map((design, i) => (
-                    <Col span={8} key={i} {...colSizes}>
-                        <DesignCard showUserData={showUserData} design={design} />
+                {designs.slice(pageOffset, pageOffset + pageSize).map((design, i) => (
+                    <Col span={8} key={i} {...{ ...colSizes, ...colSizesOverride }}>
+                        <DesignCard showUserData={showUserData} design={design} showActions={showActions} />
                     </Col>
                 ))}
             </Row>
