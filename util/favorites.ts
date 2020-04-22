@@ -1,4 +1,6 @@
-import { DesignData } from "../pages/api/save-design";
+// import { DesignData } from "../pages/api/save-design";
+
+type DesignData = any;
 
 class Favorites {
     static localStorageKey = "savedFavorites";

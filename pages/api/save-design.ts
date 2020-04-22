@@ -2,10 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { elasticClient } from "../../util/elastic";
 import { Indicies } from "../../util/elastic-indicies";
 
-interface ProcessedDesignData {
+interface ProcessedImageData {
     creatorId: string;
     designId: string;
-    designImage: string;
+    image: string;
+}
+
+interface ProcessedDesignData {
+    processedImages: ProcessedImageData[];
     twitterData?: TwitterDesignData;
 }
 
@@ -29,6 +33,7 @@ interface TwitterDesignData {
 export type DesignData = BaseDesignData;
 export type TwitterData = TwitterDesignData;
 export type ProcessedDesign = ProcessedDesignData;
+export type ProcessedImage = ProcessedImageData;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { index, body } = req.body as { index: Indicies; body: DesignData };

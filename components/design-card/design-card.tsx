@@ -25,7 +25,7 @@ const CardTitle = ({ design, showUserData }: DesignCardProps) => (
     <>{showUserData ? design.designName : "Design Info"}</>
 );
 
-export const DesignCard = ({ design, showUserData, showActions = true }: DesignCardProps) => {
+export const DesignCard = ({ design, showUserData, showActions = true }: any) => {
     const [cardFavorited, favorite] = useState(false);
     useEffect(() => {
         // Calling this in here because setting the value in useState caused reconciliation issues
@@ -89,7 +89,7 @@ export const DesignCard = ({ design, showUserData, showActions = true }: DesignC
                         </Descriptions.Item>
                         {showUserData ? (
                             <Descriptions.Item label="tags">
-                                {design.tags.map((tag, n) => (
+                                {design.tags.map((tag: any, n: number) => (
                                     <Tag color="blue" key={n}>
                                         {tag}
                                     </Tag>

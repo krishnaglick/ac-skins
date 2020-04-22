@@ -22,25 +22,23 @@ async function processImage(url: string): Promise<ProcessedDesign> {
     try {
         if (["png", "jpg"].some(extension => url.includes(extension))) {
             try {
-                return await imageProcessor.processImage([url]);
+                return {
+                    processedImages: await imageProcessor.processImage([url]),
+                };
             } catch (err) {
                 console.error("Can't process image: ", err, url);
-                return { creatorId: "", designId: "", designImage: url };
+                return { processedImages: [{ creatorId: "", designId: "", image: url }] };
             }
         } else if (url.includes("twitter")) {
             const tweetId = url.split("/").splice(-1)[0];
             const twitterData = await twitterApi.getTweetData(tweetId);
-            let imageData: ProcessedDesign | undefined;
-            console.log("twitterData.images: ", twitterData.images);
             try {
-                imageData = await imageProcessor.processImage(twitterData.images);
+                return {
+                    processedImages: await imageProcessor.processImage(twitterData.images),
+                    twitterData,
+                };
             } catch (err) {
                 console.debug("Error Processing Images: ", twitterData.images, "\n", err);
-            }
-
-            if (imageData) {
-                imageData.twitterData = twitterData;
-                return imageData;
             }
             throw new Error("No image on tweet");
         } else if (url.includes("imgur")) {

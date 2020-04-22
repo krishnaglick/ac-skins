@@ -1,5 +1,5 @@
 import { createWorker } from "tesseract.js";
-import type { ProcessedDesign } from "../pages/api/save-design";
+import type { ProcessedImage } from "../pages/api/save-design";
 
 class ImageProcessor {
     worker = createWorker({
@@ -24,33 +24,37 @@ class ImageProcessor {
         return text;
     };
 
-    processImage = async (images = ["./test-images/eternal-jacket.jpg"]): Promise<ProcessedDesign> => {
+    processImage = async (images = ["./test-images/eternal-jacket.jpg"]): Promise<ProcessedImage[]> => {
         await this.worker.load();
         await this.worker.loadLanguage("eng");
         await this.worker.initialize("eng");
-        let creatorId = "";
-        let designId = "";
-        let designImage = "";
+        // return Promise.all(
+        //     images.map(async image => {
+        //         const text = await this.parseImage(image);
+        //         const creatorId = this.getCreatorId(text);
+        //         const designId = this.getDesignId(text);
+        //         return { creatorId, designId, image };
+        //     }),
+        // ).finally(() => this.worker.terminate());
+        const processedDesigns: ProcessedImage[] = [];
         for (const image of images) {
             try {
                 const text = await this.parseImage(image);
-                designImage = image;
-                creatorId = this.getCreatorId(text);
-                designId = this.getDesignId(text);
+                const creatorId = this.getCreatorId(text);
+                const designId = this.getDesignId(text);
+                processedDesigns.push({
+                    image,
+                    creatorId,
+                    designId,
+                });
                 console.debug("Image Text: ", text);
-                if (creatorId && designId) {
-                    break;
-                }
             } catch (err) {
                 console.error("Error parsing image: ", image, "\n", err);
             }
         }
 
         await this.worker.terminate();
-        if (!creatorId || !designId) {
-            throw new Error("No creatorId or design Id found");
-        }
-        return { creatorId, designId, designImage };
+        return processedDesigns;
     };
 }
 
