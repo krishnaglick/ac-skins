@@ -12,7 +12,7 @@ export const Nav = () => {
         <Header>
             <div className={styles.logo} />
             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[currentRoute]}>
-                <Menu.Item key="home">
+                <Menu.Item key="/">
                     <Link href="/">
                         <a>Home</a>
                     </Link>
