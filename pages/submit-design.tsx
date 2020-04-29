@@ -1,8 +1,10 @@
 import React, { useState /* , useMemo */ } from "react";
-import { /* Form,  */ Input /* , Button, Select */, message /* , Row, Col, Card */ } from "antd";
+import { /* Form,  */ Input /* , Button, Select */, message /* , Row, Col, Card */, Carousel } from "antd";
 import axios from "axios";
 import { Indicies } from "../util/elastic-indicies";
-import type { ProcessedDesign /* , DesignData */ } from "../pages/api/save-design";
+import type { ProcessedDesign } from "../pages/api/save-design";
+import { CardBase } from "../components/design-card/design-card";
+import { LeftCircleFilled, RightCircleFilled } from "@ant-design/icons";
 
 const processImage = async (url: string): Promise<ProcessedDesign | null> => {
     if (url.includes("http")) {
@@ -56,6 +58,24 @@ Object.freeze(defaultFormData);
 //     xl: 12,
 // };
 
+const DesignSubmissionProcessor = ({ designs }: { designs: ProcessedDesign }) => {
+    if (designs.processedImages.length > 1) {
+        return (
+            <>
+                <div>It looks like this tweet might have multiple outfits. Can you group them for us?</div>
+                <LeftCircleFilled className="left" />
+                <Carousel>
+                    {designs.processedImages.map(design => (
+                        <CardBase key={design.designId} design={design} />
+                    ))}
+                </Carousel>
+                <RightCircleFilled className="right" />
+            </>
+        );
+    }
+    return null;
+};
+
 export const DesignSubmission = () => {
     const [loading, setLoading] = useState(false);
     const [designs, setDesigns] = useState<ProcessedDesign | null>(null);
@@ -72,7 +92,7 @@ export const DesignSubmission = () => {
                     setLoading(false);
                 }}
             />
-            {JSON.stringify(designs, null, 2)}
+            {designs ? <DesignSubmissionProcessor designs={designs} /> : null}
         </>
     );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "antd";
 import axios from "axios";
-import { DesignCards } from "../components/design-card/design-card";
+// import { DesignCards } from "../components/design-card/design-card";
 import type { DesignData } from "./api/save-design";
 import type { ElasticRecord } from "../util/elastic";
 import { withRouter } from "next/router";
@@ -68,7 +68,7 @@ class DesignSearch extends React.Component<DesignSearchProps, DesignSearchState>
     }
 
     render() {
-        const { searching, searchValue, designs } = this.state;
+        const { searching, searchValue /* , designs */ } = this.state;
         return (
             <div>
                 <Input.Search
@@ -85,7 +85,7 @@ class DesignSearch extends React.Component<DesignSearchProps, DesignSearchState>
                         )
                     }
                 />
-                {designs.length ? <DesignCards designs={designs} showUserData={true} /> : null}
+                {/* {designs.length ? <DesignCards designs={designs} showUserData={true} /> : null} */}
             </div>
         );
     }
